@@ -1778,9 +1778,7 @@ Each advice is returned as a list (WHERE FUNC)."
         (push (list
                ;; This can also be done with `advice--where', but that
                ;; isn't available in Emacs 25
-               (car
-                (--last (eq (aref func 1) (cadr it))
-                        advice--where-alist))
+               (advice--how func)
                (advice--car func))
               result))
       (setq func (advice--cdr func)))
@@ -2675,7 +2673,7 @@ state of the current symbol."
   "Remove mentions of advice from DOCSTRING."
   (let* ((lines (s-lines docstring))
          (where-types (--map (symbol-name (car it))
-                             advice--where-alist))
+                             advice--how-alist))
          (relevant-lines
           (--remove
            (s-matches-p
